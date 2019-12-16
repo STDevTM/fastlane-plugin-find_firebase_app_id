@@ -1,0 +1,13 @@
+platform :ios do
+  lane :test do
+    app_id = find_firebase_app_id
+    print("#{app_id} found..")
+  end
+end
+
+platform :android do
+  lane :test do
+    app_id = find_firebase_app_id(app_identifier: "com.example.app")
+    print("#{app_id} found..")
+  end
+end

@@ -1,0 +1,14 @@
+{
+
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "##Some Android App ID##",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      } 
+    }
+  ],
+  "configuration_version": "1"
+}
