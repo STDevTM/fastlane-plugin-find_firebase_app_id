@@ -79,4 +79,4 @@ We’d be really happy if you sent us links to your projects where you use our c
 
 ## License
 
-RxRestClient is available under the MIT license. See the [LICENSE](./LICENSE) file for more info.
+The plugin is available under the MIT license. See the [LICENSE](./LICENSE) file for more info.
