@@ -35,7 +35,7 @@ bundle exec fastlane ios test
 for iOS platform
 
 ```
-bundle exec faslane android test
+bundle exec fastlane android test
 ```
 
 for Android.
