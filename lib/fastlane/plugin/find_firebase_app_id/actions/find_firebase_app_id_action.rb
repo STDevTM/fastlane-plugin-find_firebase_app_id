@@ -29,14 +29,14 @@ module Fastlane
       end
 
       def self.find_ios_app_id(params)
-        filename = "GoogleService-Info.plist"
-        file_paths = Find.find('./').select { |p| p.include?(filename) }
-        if file_paths.any?
-          plist = file_paths.first
-          GetInfoPlistValueAction.run(path: plist, key: 'GOOGLE_APP_ID')
-        else
+
+        find_gsp_path(params)
+
+        if !params[:gsp_path]
           UI.user_error!("#{filename} file is missing, please make sure you have added.")
         end
+
+        GetInfoPlistValueAction.run(path: params[:gsp_path], key: 'GOOGLE_APP_ID')
       end
 
       def self.find_android_app_id(params)
@@ -59,6 +59,15 @@ module Fastlane
           end
         else
           UI.user_error!("#{filename} file is missing, please make sure you have added.")
+        end
+      end
+
+      def self.find_gsp_path(params)
+        if params[:gsp_path].to_s.length > 0
+          params[:gsp_path] = File.expand_path(params[:gsp_path])
+        else
+          gsp_path = Dir["./**/GoogleService-Info.plist"].first
+          params[:gsp_path] = File.expand_path(gsp_path) unless gsp_path.nil?
         end
       end
 
@@ -95,7 +104,16 @@ module Fastlane
                                   env_name: "FIND_FIREBASE_APP_ID_APP_IDENTIFIER",
                                description: "The app identifier to find Firebase App ID (Required: for Android platform)",
                                   optional: true,
-                                      type: String)
+                                      type: String),
+          FastlaneCore::ConfigItem.new(key: :gsp_path,
+                                  env_name: "GOOGLE_SERVICES_INFO_PLIST_PATH",
+                        code_gen_sensitive: true,
+                                description: "Path to GoogleService-Info.plist (only for iOS platform)",
+                                  optional: true,
+                              verify_block: proc do |value|
+                                UI.user_error!("Couldn't find file at path '#{File.expand_path(value)}'") unless File.exist?(value)
+                                UI.user_error!("No Path to GoogleService-Info.plist for Firebase Crashlytics given, pass using `gsp_path: 'path'`") if value.to_s.length == 0
+                              end),
         ]
       end
 
